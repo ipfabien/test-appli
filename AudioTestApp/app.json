@@ -45,7 +45,8 @@
     "extra": {
       "eas": {
         "projectId": "2b35a482-7a03-4339-95e8-e2ba53989e12"
-      }
+      },
+      "OPENAI_API_KEY": "@env:OPENAI_API_KEY"
     }
   }
 }

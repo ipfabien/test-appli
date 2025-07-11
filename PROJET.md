@@ -4,9 +4,15 @@ Le but de ce projet est de pouvoir tester le micro et la réception du son dans 
 
 ## Front et fonctionnalités
 
+Version 1.0.0
+
 - Un bouton pour lancer l'enregsitrement audio de l'utilisateur
 - Un un bouton d'arrêt pour stopper l'enregistrement
 - un bouton pour écouter l'enregistrement qui diffuserait le son enregistré
+
+Version 1.1.0
+
+- avoir un encart texte sous bouton d'écoute de l'enregistrement. Et quand on écoute l'audio ça retranscris l'audio en texte dans cet encart.
 
 ## Impératif
 

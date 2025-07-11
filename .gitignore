@@ -1,0 +1,3 @@
+# Ignorer tous les fichiers .env à la racine et dans les sous-dossiers
+.env
+AudioTestApp/.env 

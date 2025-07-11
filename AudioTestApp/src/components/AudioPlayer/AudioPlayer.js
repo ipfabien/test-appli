@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import useAudioPlayer from '../../hooks/useAudioPlayer';
+import useTranscription from '../../hooks/useTranscription';
 import Button from '../Button';
 
 /**
@@ -35,6 +36,15 @@ const AudioPlayer = ({
         getProgress
     } = useAudioPlayer(audioUri);
 
+    // Hook transcription
+    const {
+        transcribe,
+        isLoading: isTranscribing,
+        text: transcriptionText,
+        error: transcriptionError,
+        reset: resetTranscription
+    } = useTranscription();
+
     // Gérer les erreurs
     React.useEffect(() => {
         if (error && onError) {
@@ -43,14 +53,18 @@ const AudioPlayer = ({
         }
     }, [error, onError]);
 
-    // Callbacks
+    // Déclencher la transcription à chaque lecture
     const handlePlay = async () => {
         try {
+            resetTranscription();
             await playAudio(undefined, () => {
                 if (onEnd) onEnd();
             });
             if (onPlay) {
                 onPlay();
+            }
+            if (audioUri) {
+                transcribe(audioUri);
             }
         } catch (error) {
             // déjà géré
@@ -92,6 +106,19 @@ const AudioPlayer = ({
             {error && !isPlaying && (
                 <Text style={styles.errorText}>{error}</Text>
             )}
+
+            {/* Encart transcription */}
+            <View style={styles.transcriptionBox}>
+                {isTranscribing && (
+                    <Text style={styles.transcriptionLoading}>Transcription en cours...</Text>
+                )}
+                {transcriptionError && (
+                    <Text style={styles.transcriptionError}>Erreur : {transcriptionError}</Text>
+                )}
+                {transcriptionText && !isTranscribing && !transcriptionError && (
+                    <Text style={styles.transcriptionText}>{transcriptionText}</Text>
+                )}
+            </View>
 
             {/* Contrôles de lecture */}
             <View style={styles.controlsContainer}>
@@ -211,6 +238,29 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 8,
         fontStyle: 'italic',
+    },
+    transcriptionBox: {
+        marginTop: 16,
+        padding: 12,
+        backgroundColor: '#F7F7F7',
+        borderRadius: 8,
+        minHeight: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    transcriptionLoading: {
+        color: '#007AFF',
+        fontStyle: 'italic',
+        fontSize: 13,
+    },
+    transcriptionError: {
+        color: '#FF3B30',
+        fontSize: 13,
+    },
+    transcriptionText: {
+        color: '#222',
+        fontSize: 15,
+        textAlign: 'center',
     },
 });
 
